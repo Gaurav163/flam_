@@ -1,0 +1,27 @@
+
+
+@baseurl = http://localhost:5000
+@contentType = application/json
+@auth_token = `auth_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZmU5M2Y1OThkMGZkOWYwNWU3YzVhNiIsIm5hbWUiOiJuYW1lVGVzdCIsImVtYWlsIjoidGVzdEBlbWFpbC5jb20iLCJpYXQiOjE2OTQ0MDYwMzB9.O4ZCzkNOLvhftmp_RxyJ2Wjv4mEQjiNCuxsZNzTU1mo; Path=/`
+
+
+POST {{baseurl}}/user/signup HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "name": "nameTest",
+    "email":"test1@email.com",
+    "password":"12345678"
+   
+}
+
+###
+
+POST {{baseurl}}/user/signin HTTP/1.1
+content-type: {{contentType}}
+
+{
+    "email":"test1@email.com",
+    "password":"12345678"
+   
+}
