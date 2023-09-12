@@ -12,46 +12,38 @@ router.route("/").post(async (req, res) => {
             return res.status(400).send({ message: "Cart is Empty" });
         }
         let barcodes = Object.keys(cart.books);
-        console.log(cart);
         if (barcodes.length == 0) {
             return res.status(400).send({ message: "Cart is Empty" });
         }
-        const order = new Order();
-        order.email = req.user.email;
-        let books = []
+        let order = new Order({ email: req.user.email });
 
-        order.qty = 0;
-        order.price = 0;
-
-        let x = barcodes.map(async barcode => {
-            let book = await Book.findOne({ barcode: barcode });
-
+        let books = await Book.find({ barcode: barcodes });
+        order.books = [];
+        books.forEach((book) => {
             let item = {
-                barcode,
-                quantity: cart.books[barcode],
+                barcode: book.barcode,
+                quantity: cart.books[book.barcode],
                 price: book.price
             }
-            order.books.push[item];
+            order.books.push(item);
 
-            order.qty += cart.books[barcode];
-            order.price += book.price * cart.books[barcode];
-
-        });
-        if (x) { }
+            order.qty += cart.books[book.barcode];
+            order.price += book.price * cart.books[book.barcode];
+        })
 
         cart.books = {};
-        await cart.save();
+
         await order.save();
-        res.send({ order });
-
-
+        await cart.save();
+        return res.send(order);
 
     }
     catch (error) {
         console.log(error);
         res.status(500).json({ message: "Internal Error Occured", error });
     }
-})
+});
+
 
 router.route("/").get(async (req, res) => {
     try {
